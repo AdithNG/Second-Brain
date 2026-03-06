@@ -23,25 +23,10 @@ export default function Sidebar({ view, onViewChange }: SidebarProps) {
         flexShrink: 0,
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "0 8px 20px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "0 8px 16px" }}>
         <Brain size={22} color="var(--accent)" />
         <span style={{ fontWeight: 700, fontSize: 16, color: "var(--text)" }}>Second Brain</span>
       </div>
-
-      <NavItem
-        icon={<MessageSquare size={16} />}
-        label="Chat"
-        active={view === "chat"}
-        onClick={() => onViewChange("chat")}
-      />
-      <NavItem
-        icon={<BookOpen size={16} />}
-        label="Library"
-        active={view === "library"}
-        onClick={() => onViewChange("library")}
-      />
-
-      <div style={{ flex: 1 }} />
 
       <button
         onClick={() => onViewChange("library")}
@@ -57,11 +42,25 @@ export default function Sidebar({ view, onViewChange }: SidebarProps) {
           cursor: "pointer",
           fontSize: 14,
           fontWeight: 600,
+          marginBottom: 8,
         }}
       >
         <Plus size={16} />
         Add Knowledge
       </button>
+
+      <NavItem
+        icon={<MessageSquare size={16} />}
+        label="Chat"
+        active={view === "chat"}
+        onClick={() => onViewChange("chat")}
+      />
+      <NavItem
+        icon={<BookOpen size={16} />}
+        label="Library"
+        active={view === "library"}
+        onClick={() => onViewChange("library")}
+      />
     </aside>
   );
 }
