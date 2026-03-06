@@ -1,6 +1,6 @@
 # Second Brain
 
-A personal RAG-based knowledge system. Ingest articles, PDFs, docs, and notes — then query them with AI-powered retrieval and grounded answers.
+A personal RAG-based knowledge system. Ingest articles, PDFs, docs, and notes, then query them with AI-powered retrieval and grounded answers.
 
 ## Stack
 
@@ -63,8 +63,47 @@ docker compose up --build
 
 ## Features
 
-- Full RAG pipeline: chunk → embed → store → retrieve → synthesize
+- Full RAG pipeline: chunk -> embed -> store -> retrieve -> synthesize
 - Source citations with relevance scores on every answer
 - Tag-based document organization
 - Supports PDF, DOCX, plain text, Markdown, and web URLs
 - Persistent local vector storage (no cloud required)
+
+## Testing
+
+The backend has 29 unit and integration tests covering the ingestion pipeline, retrieval logic, and all API routes. All external dependencies (ChromaDB, OpenAI, Anthropic) are mocked so tests run without API keys.
+
+```bash
+cd backend
+pip install pytest httpx
+pytest tests/ -v
+```
+
+Test coverage:
+- `tests/test_ingest.py` - document loading, HTML stripping, chunking, file parsing
+- `tests/test_retrieve.py` - query flow, source deduplication, empty knowledge base handling
+- `tests/test_api.py` - all HTTP endpoints, request validation, error propagation
+
+## Architecture
+
+```
+backend/
+  app/
+    config.py          # centralized settings (chunk size, model names, top-k)
+    rag/
+      index.py         # ChromaDB + LlamaIndex singleton
+      ingest.py        # URL scraping, file parsing, chunking, embedding
+      retrieve.py      # vector search + Claude response synthesis
+    api/
+      routes.py        # FastAPI route handlers
+  main.py              # app entrypoint with CORS middleware
+  tests/               # pytest test suite
+
+frontend/
+  app/                 # Next.js app router
+  components/
+    ChatView.tsx       # chat interface with source citations
+    LibraryView.tsx    # ingest panel + document browser
+    Sidebar.tsx        # navigation
+  lib/api.ts           # typed API client
+```
