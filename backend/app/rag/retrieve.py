@@ -27,7 +27,11 @@ def query(question: str) -> dict:
             seen.add(key)
             sources.append({"title": title, "source": source, "score": round(node.score or 0.0, 4)})
 
-    return {"answer": str(response), "sources": sources}
+    answer = str(response).strip()
+    if not answer or answer.lower() in ("empty response", "none"):
+        answer = "Your knowledge base is empty. Go to the Library tab and add some documents first, then ask your question again."
+
+    return {"answer": answer, "sources": sources}
 
 
 def list_documents() -> list[dict]:
